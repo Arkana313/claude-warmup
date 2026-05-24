@@ -1,0 +1,23 @@
+name: Claude Warmup
+
+on:
+  schedule:
+    - cron: '0 */5 * * *'
+  workflow_dispatch:
+
+jobs:
+  warmup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Claude warmup
+        env:
+          CLAUDE_API_TOKEN: ${{ secrets.CLAUDE_API_TOKEN }}
+        run: |
+          curl -X POST https://api.anthropic.com/v1/messages \
+            -H "Content-Type: application/json" \
+            -H "x-api-key: $CLAUDE_API_TOKEN" \
+            -d '{
+              "model": "claude-opus-4-20250514",
+              "max_tokens": 50,
+              "messages": [{"role": "user", "content": "ping"}]
+            }'
