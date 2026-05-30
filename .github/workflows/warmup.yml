@@ -2,11 +2,8 @@ name: Claude Warmup
 
 on:
   schedule:
-  - cron: '0 22 * * *'
-  - cron: '0 3 * * *'
-  - cron: '0 8 * * *'
-  - cron: '0 13 * * *'
-  workflow_dispatch:
+    - cron: '0 */5 * * *' # Berjalan otomatis setiap 5 jam (00, 05, 10, 15, 20 UTC)
+  workflow_dispatch: # Membuat tombol manual di tab Actions agar bisa kamu tes kapan saja
 
 jobs:
   warmup:
@@ -19,8 +16,9 @@ jobs:
           curl -X POST https://api.anthropic.com/v1/messages \
             -H "Content-Type: application/json" \
             -H "x-api-key: $CLAUDE_API_TOKEN" \
+            -H "anthropic-version: 2023-06-01" \
             -d '{
-              "model": "claude-opus-4-20250514",
+              "model": "claude-haiku-4-5",
               "max_tokens": 50,
               "messages": [{"role": "user", "content": "ping"}]
             }'
